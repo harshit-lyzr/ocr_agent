@@ -116,3 +116,5 @@ def calculate_actions(
 
     return total_actions
 
+
+print(calculate_actions("gemini","gemini-1.5-pro",1000,1000))

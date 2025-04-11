@@ -5,6 +5,7 @@ import shutil
 from pyzerox import zerox
 from dotenv import load_dotenv
 from ops import calculate_actions
+from pagos import deduct_usage
 
 
 load_dotenv()
@@ -26,7 +27,7 @@ async def read_root():
 
 
 @app.post("/extract")
-async def extract_pdf(file: UploadFile = File(...)):
+async def extract_pdf(organization_id: str, file: UploadFile = File(...)):
     try:
         # Save the uploaded file
         file_path = os.path.join(UPLOAD_DIR, file.filename)
@@ -46,8 +47,8 @@ async def extract_pdf(file: UploadFile = File(...)):
         # Cleanup: Remove the file after processing
         os.remove(file_path)
         total_actions = calculate_actions("gemini","gemini-1.5-pro", result.input_tokens, result.output_tokens)
-
-        return {"status": "success", "data": pages_dict, "token_count": tokens, "total_actions":total_actions}
+        deduct_usage(organization_id, total_actions)
+        return {"status": "success", "data": pages_dict, "total_actions": total_actions}
 
     except Exception as e:
         return {"status": "error", "message": str(e)}
