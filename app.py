@@ -48,7 +48,7 @@ async def extract_pdf(api_key: str, file: UploadFile = File(...)):
         os.remove(file_path)
         total_actions = calculate_actions("gemini","gemini-1.5-pro", result.input_tokens, result.output_tokens)
         org_id = get_organization_id(api_key)
-        deduct_usage(org_id, total_actions)
+        deduct_usage(org_id["data"], total_actions)
         return {"status": "success", "data": pages_dict, "total_actions": total_actions}
 
     except Exception as e:
