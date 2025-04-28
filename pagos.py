@@ -45,7 +45,7 @@ def get_organization_id(api_key:str):
         response.raise_for_status()
         return {
             "status": "success",
-            "data": data['data']['org_id']
+            "data": response['data']['org_id']
         }
     except Exception as e:
         print(f"❌ Error: {str(e)}")
