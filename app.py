@@ -6,10 +6,19 @@ from pyzerox import zerox
 from dotenv import load_dotenv
 from ops import calculate_actions
 from pagos import deduct_usage, get_organization_id
+from fastapi.middleware.cors import CORSMiddleware
 
 
 load_dotenv()
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change to specific domains in production, e.g., ["https://yourdomain.com"]
+    allow_credentials=True,
+    allow_methods=["*"],  # ["GET", "POST"] if you want to restrict methods
+    allow_headers=["*"],
+)
 
 # Set Gemini API Key
 os.environ["GEMINI_API_KEY"] = os.getenv("GEMINI_API_KEY")
